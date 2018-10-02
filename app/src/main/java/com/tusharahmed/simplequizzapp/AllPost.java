@@ -5,7 +5,8 @@ import com.google.gson.annotations.SerializedName;
 
 import java.io.Serializable;
 
-public class Animal implements Serializable {
+public class AllPost implements Serializable{
+
     @SerializedName("id")
     @Expose
     private Integer id;
@@ -28,7 +29,19 @@ public class Animal implements Serializable {
     @Expose
     private String featured;
 
-    public Animal(Integer id, String name, String _class, Integer rulling, String reason, String contents, String featured) {
+    @SerializedName("views")
+    @Expose
+    private String views;
+
+    @SerializedName("likes")
+    @Expose
+    private String likes;
+
+
+    public AllPost() {
+    }
+
+    public AllPost(Integer id, String name, String _class, Integer rulling, String reason, String contents, String featured, String views, String likes) {
         this.id = id;
         this.name = name;
         this._class = _class;
@@ -36,6 +49,25 @@ public class Animal implements Serializable {
         this.reason = reason;
         this.contents = contents;
         this.featured = featured;
+        this.likes =likes;
+        this.views = views;
+    }
+
+
+    public String getViews() {
+        return views;
+    }
+
+    public void setViews(String views) {
+        this.views = views;
+    }
+
+    public String getLikes() {
+        return likes;
+    }
+
+    public void setLikes(String likes) {
+        this.likes = likes;
     }
 
     public Integer getId() {
@@ -93,6 +125,4 @@ public class Animal implements Serializable {
     public void setFeatured(String featured) {
         this.featured = featured;
     }
-
-
 }

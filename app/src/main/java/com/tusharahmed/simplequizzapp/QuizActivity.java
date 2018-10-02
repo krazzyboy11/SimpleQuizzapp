@@ -5,13 +5,21 @@ import android.content.Intent;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import java.util.List;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+
 public class QuizActivity extends AppCompatActivity {
 
+    private static final String TAG = "" ;
     private TextView mScoreView, mQuestion;
     private ImageView mImageView;
     private Button mTrueButton, mFalseButton;
@@ -106,6 +114,23 @@ public class QuizActivity extends AppCompatActivity {
 
 
     private void updateQuestion() {
+
+        RestClient.getInstance().callRetrofit().getAllAnimals().enqueue(new Callback<MostViewedResponse>() {
+            @Override
+            public void onResponse(Call<MostViewedResponse> call, Response<MostViewedResponse> response) {
+                List<AllPost> posts = response.body().getAllpost();
+                Log.d(TAG, "onResponse: "+posts);
+                mImageView.setImageResource(QuizBook.images[mQuestionNumber]);
+                mQuestion.setText(posts.get(mQuestionNumber).getContents());
+                mAnswer = QuizBook.answers[mQuestionNumber];
+                mQuestionNumber++;
+            }
+
+            @Override
+            public void onFailure(Call<MostViewedResponse> call, Throwable t) {
+
+            }
+        });
 
         mImageView.setImageResource(QuizBook.images[mQuestionNumber]);
         mQuestion.setText(QuizBook.questions[mQuestionNumber]);
