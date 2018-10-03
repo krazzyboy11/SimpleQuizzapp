@@ -11,6 +11,8 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.squareup.picasso.Picasso;
+
 import java.util.List;
 
 import retrofit2.Call;
@@ -24,7 +26,7 @@ public class QuizActivity extends AppCompatActivity {
     private ImageView mImageView;
     private Button mTrueButton, mFalseButton;
 
-    private boolean mAnswer;
+    private int mAnswer;
     private int mScore = 0;
     private int mQuestionNumber = 0;
 
@@ -45,7 +47,7 @@ public class QuizActivity extends AppCompatActivity {
         mTrueButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if(mAnswer == true) {
+                if(mAnswer == 1) {
                     mScore++;
                     updateScore(mScore);
 
@@ -80,7 +82,7 @@ public class QuizActivity extends AppCompatActivity {
         mFalseButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if(mAnswer == false) {
+                if(mAnswer == 0) {
                     mScore++;
                     updateScore(mScore);
 
@@ -120,9 +122,12 @@ public class QuizActivity extends AppCompatActivity {
             public void onResponse(Call<MostViewedResponse> call, Response<MostViewedResponse> response) {
                 List<AllPost> posts = response.body().getAllpost();
                 Log.d(TAG, "onResponse: "+posts);
+                Picasso.get().load(posts.get(mQuestionNumber).getFeatured()).into(mImageView);
+/*
                 mImageView.setImageResource(QuizBook.images[mQuestionNumber]);
+*/
                 mQuestion.setText(posts.get(mQuestionNumber).getContents());
-                mAnswer = QuizBook.answers[mQuestionNumber];
+                mAnswer = posts.get(mQuestionNumber).getRulling();
                 mQuestionNumber++;
             }
 
@@ -132,10 +137,10 @@ public class QuizActivity extends AppCompatActivity {
             }
         });
 
-        mImageView.setImageResource(QuizBook.images[mQuestionNumber]);
+        /*mImageView.setImageResource(QuizBook.images[mQuestionNumber]);
         mQuestion.setText(QuizBook.questions[mQuestionNumber]);
         mAnswer = QuizBook.answers[mQuestionNumber];
-        mQuestionNumber++;
+        mQuestionNumber++;*/
     }
     private void updateScore(int point) {
         mScoreView.setText("" + mScore);
